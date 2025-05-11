@@ -8,6 +8,7 @@ enum MESSAGES {
   dashboardRevenueCardNoData = "No data available",
   dashboardLatestInvCardTitle = "Latest Invoices",
   dashboardLatestInvCardUpdated = "Updated just now",
+  dashboardRevenueCardTime = "Last 12 months",
 }
 
 export default MESSAGES;
