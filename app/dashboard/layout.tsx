@@ -1,6 +1,9 @@
 import { PropsWithChildren } from "react";
 import SideNav from "@/app/ui/dashboard/sidenav";
 
+// Enable PPR on all pages under '/dashboard'
+export const experimental_ppr = true;
+
 /** children in a layout file are any pages nested inside this route, for this case "url/dashboard/*" */
 const Layout = ({ children }: PropsWithChildren) => {
   return (
