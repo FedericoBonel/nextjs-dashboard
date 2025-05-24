@@ -9,6 +9,15 @@ enum MESSAGES {
   dashboardLatestInvCardTitle = "Latest Invoices",
   dashboardLatestInvCardUpdated = "Updated just now",
   dashboardRevenueCardTime = "Last 12 months",
+  invoicesTitle = "Invoices",
+  invoicesSearchTip = "Search invoices...",
+  invoicesCustomerHr = "Customer",
+  invoicesEmailHr = "Email",
+  invoicesAmountHr = "Amount",
+  invoicesDateHr = "Date",
+  invoicesStatusHr = "Status",
+  searchLabel = "Search",
+  editLabel = "Edit",
 }
 
 export default MESSAGES;
