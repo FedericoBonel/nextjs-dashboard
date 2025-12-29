@@ -7,7 +7,8 @@ import {
   HomeIcon,
   DocumentDuplicateIcon,
 } from "@heroicons/react/24/outline";
-import clsx from "clsx";
+
+import { cn } from "@/app/lib/utils";
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -32,7 +33,7 @@ export default function NavLinks() {
           <Link
             key={link.name}
             href={link.href}
-            className={clsx(
+            className={cn(
               "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
               {
                 "bg-sky-50 text-blue-600": link.href === pathname,

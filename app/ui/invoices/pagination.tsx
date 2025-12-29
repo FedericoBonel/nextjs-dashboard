@@ -1,10 +1,10 @@
 "use client";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
 import Link from "next/link";
-import { generatePagination } from "@/app/lib/utils";
 import { usePathname, useSearchParams } from "next/navigation";
+import { generatePagination } from "@/app/lib/utils";
+import { cn } from "@/app/lib/utils";
 
 export default function Pagination({ totalPages }: { totalPages: number }) {
   // Use client side navigation to handle user interaction without going back to the server
@@ -72,7 +72,7 @@ function PaginationNumber({
   position?: "first" | "last" | "middle" | "single";
   isActive: boolean;
 }) {
-  const className = clsx(
+  const className = cn(
     "flex h-10 w-10 items-center justify-center text-sm border",
     {
       "rounded-l-md": position === "first" || position === "single",
@@ -101,7 +101,7 @@ function PaginationArrow({
   direction: "left" | "right";
   isDisabled?: boolean;
 }) {
-  const className = clsx(
+  const className = cn(
     "flex h-10 w-10 items-center justify-center rounded-md border",
     {
       "pointer-events-none text-gray-300": isDisabled,

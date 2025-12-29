@@ -7,40 +7,64 @@ import postgres from "postgres";
 import { redirect } from "next/navigation";
 import dateToUTCDateString from "@/app/lib/formatters/date-to-utc-date-string";
 import currencyToDiscrete from "@/app/lib/formatters/currency-to-discrete";
+import { ActionState } from "./types";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 const InvoiceSchema = z
   .object({
-    id: z.string(),
-    customerId: z.string().uuid(),
+    id: z.string().uuid(),
+    customerId: z
+      .string({ message: "Please select a customer" })
+      .uuid({ message: "Please select a customer" }),
     amount: z.coerce
       .number()
-      .max(Number.MAX_SAFE_INTEGER)
-      .min(Number.MIN_SAFE_INTEGER),
-    status: z.enum(["paid", "pending"]),
+      .lt(Number.MAX_SAFE_INTEGER, {
+        message: `Provide an amount less than $${Number.MAX_SAFE_INTEGER}`,
+      })
+      .gt(0, {
+        message: `Provide a number greater than $0.00`,
+      }),
+    status: z.enum(["paid", "pending"], {
+      invalid_type_error: "Please select an invoice status",
+    }),
     date: z.string().date(),
   })
   .strict();
 
 const CreateInvoice = InvoiceSchema.omit({ id: true, date: true }).strict();
 
-export async function createInvoice(formData: FormData) {
-  try {
-    const rawData = {
-      customerId: formData.get("customerId"),
-      amount: formData.get("amount"),
-      status: formData.get("status"),
+export async function createInvoice(
+  _prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  // Validate and format the data
+  const rawData = {
+    customerId: formData.get("customerId"),
+    amount: formData.get("amount"),
+    status: formData.get("status"),
+  };
+
+  const validationRes = CreateInvoice.safeParse(rawData);
+
+  if (!validationRes.success) {
+    const errors = validationRes.error.flatten().fieldErrors;
+
+    return {
+      message: "The form contains errors. Please fix them and try again.",
+      errors,
     };
-    const validData = CreateInvoice.parse(rawData);
+  }
 
-    // Convert dollars to cents to eliminate floating point numbers
-    // Using a map to convert it so we can support multiple currencies
-    validData.amount = currencyToDiscrete["usd"](validData.amount);
+  const validData = validationRes.data;
 
-    // Get the created at date in international timezone, for some weird reason vercel team thought using "YYYY-MM-DD" is a good format... stupid
-    const createdAt = dateToUTCDateString(new Date());
+  // Convert dollars to cents to eliminate floating point numbers
+  // Using a map to convert it so we can support multiple currencies
+  validData.amount = currencyToDiscrete["usd"](validData.amount);
+  // Get the created at date in international timezone, for some weird reason vercel team thought using "YYYY-MM-DD" is a good format... stupid
+  const createdAt = dateToUTCDateString(new Date());
 
+  try {
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date) 
       VALUES (${validData.customerId}, ${validData.amount}, ${validData.status}, ${createdAt})
@@ -48,8 +72,11 @@ export async function createInvoice(formData: FormData) {
 
     revalidatePath("/dashboard/invoices");
   } catch (e) {
-    console.log(e);
-    return;
+    console.error("Database error:", e);
+    return {
+      message: "An unexpected error occurred. Please try again.",
+      errors: {},
+    };
   }
   redirect("/dashboard/invoices");
 }

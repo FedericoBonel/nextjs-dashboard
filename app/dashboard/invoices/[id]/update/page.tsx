@@ -4,9 +4,9 @@ import { fetchCustomers, fetchInvoiceById } from "@/app/lib/data";
 import { notFound } from "next/navigation";
 
 const createBreadcrumbs = (invoiceId: string) => [
-  { label: "invoices", href: "/dashboard/invoices" },
+  { label: "Invoices", href: "/dashboard/invoices" },
   {
-    label: "update",
+    label: "Update Invoice",
     href: `/dashboard/invoices/${invoiceId}/update`,
     active: true,
   },
