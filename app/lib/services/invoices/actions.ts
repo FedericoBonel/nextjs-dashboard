@@ -3,7 +3,6 @@
 "use server";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import postgres from "postgres";
 import { redirect } from "next/navigation";
 import dateToUTCDateString from "@/app/lib/utils/formatters/date-to-utc-date-string";
 import currencyToDiscrete from "@/app/lib/utils/formatters/currency-to-discrete";
@@ -12,8 +11,7 @@ import {
   createInternalServerError,
 } from "./action-state";
 import { ActionState } from "./types";
-
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
+import db from "@/app/lib/db/connection";
 
 const InvoiceSchema = z
   .object({
@@ -64,7 +62,7 @@ export async function createInvoice(
   const createdAt = dateToUTCDateString(new Date());
 
   try {
-    await sql`
+    await db`
       INSERT INTO invoices (customer_id, amount, status, date) 
       VALUES (${validData.customerId}, ${validData.amount}, ${validData.status}, ${createdAt})
     `;
@@ -103,7 +101,7 @@ export async function updateInvoiceById(
 
   try {
     // Update the invoice
-    await sql`
+    await db`
     UPDATE invoices 
     SET customer_id = ${validData.customerId}, amount = ${validData.amount}, status = ${validData.status} 
     WHERE id = ${validData.id}`;
@@ -125,14 +123,14 @@ export async function deleteInvoiceById(id: string) {
     const validId = DeleteId.parse(id);
 
     // delete the invoice
-    await sql`
+    await db`
       DELETE FROM invoices where id = ${validId}
     `;
   } catch (e) {
     console.error("Database error:", e);
     return createInternalServerError();
   }
-  
+
   // revalidate the path
   revalidatePath("/dashboard/invoices");
 }
