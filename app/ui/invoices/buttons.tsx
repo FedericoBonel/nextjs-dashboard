@@ -1,6 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { deleteInvoiceById } from "@/app/services/invoices/actions";
+import { cn } from "@/app/lib/utils";
+import { useRouter } from "next/navigation";
 
 export function CreateInvoice() {
   return (
@@ -26,14 +31,29 @@ export function UpdateInvoice({ id }: { id: string }) {
 }
 
 export function DeleteInvoice({ id }: { id: string }) {
-  const boundDeleteInvoiceById = deleteInvoiceById.bind(null, id);
+  const router = useRouter();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    const res = await deleteInvoiceById(id);
+    if (res) {
+      setIsDeleting(false);
+      router.push("/error/500");
+    }
+  };
 
   return (
-    <form action={boundDeleteInvoiceById}>
-      <button type="submit" className="rounded-md border p-2 hover:bg-gray-100">
-        <span className="sr-only">Delete</span>
-        <TrashIcon className="w-5" />
-      </button>
-    </form>
+    <button
+      className={cn(
+        "rounded-md border p-2 hover:bg-gray-100",
+        isDeleting && "opacity-50 pointer-events-none"
+      )}
+      onClick={handleDelete}
+      disabled={isDeleting}
+    >
+      <span className="sr-only">Delete</span>
+      <TrashIcon className="w-5" />
+    </button>
   );
 }

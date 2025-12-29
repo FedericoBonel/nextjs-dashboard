@@ -9,6 +9,7 @@ export const initialState: ActionState = {
 const errorMessageByCode: Record<number, string> = {
   500: "An unexpected error happened. Please try again.",
   400: "The provided values are invalid. Please fix them and try again.",
+  404: "The requested resource couldn't be found",
 };
 
 export const createErrorState = (
@@ -37,4 +38,8 @@ export const createInternalServerError = (
   message = errorMessageByCode[500]
 ) => {
   return createErrorState(500, message);
+};
+
+export const createNotFoundError = () => {
+  return createErrorState(404);
 };

@@ -111,7 +111,7 @@ export async function updateInvoiceById(
     // Revalidate the invoices path to show latest data, and redirect to it
     revalidatePath("/dashboard/invoices");
   } catch (e) {
-    console.error(e);
+    console.error("Database error:", e);
     return createInternalServerError();
   }
   redirect("/dashboard/invoices");
@@ -132,7 +132,7 @@ export async function deleteInvoiceById(id: string) {
     // revalidate the path
     revalidatePath("/dashboard/invoices");
   } catch (e) {
-    console.error(e);
-    return;
+    console.error("Database error:", e);
+    return createInternalServerError();
   }
 }
