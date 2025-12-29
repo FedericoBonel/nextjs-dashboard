@@ -68,12 +68,12 @@ export async function createInvoice(
       INSERT INTO invoices (customer_id, amount, status, date) 
       VALUES (${validData.customerId}, ${validData.amount}, ${validData.status}, ${createdAt})
     `;
-
-    revalidatePath("/dashboard/invoices");
   } catch (e) {
     console.error("Database error:", e);
     return createInternalServerError();
   }
+
+  revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }
 
@@ -107,13 +107,13 @@ export async function updateInvoiceById(
     UPDATE invoices 
     SET customer_id = ${validData.customerId}, amount = ${validData.amount}, status = ${validData.status} 
     WHERE id = ${validData.id}`;
-
-    // Revalidate the invoices path to show latest data, and redirect to it
-    revalidatePath("/dashboard/invoices");
   } catch (e) {
     console.error("Database error:", e);
     return createInternalServerError();
   }
+
+  // Revalidate the invoices path to show latest data, and redirect to it
+  revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }
 
@@ -128,11 +128,11 @@ export async function deleteInvoiceById(id: string) {
     await sql`
       DELETE FROM invoices where id = ${validId}
     `;
-
-    // revalidate the path
-    revalidatePath("/dashboard/invoices");
   } catch (e) {
     console.error("Database error:", e);
     return createInternalServerError();
   }
+  
+  // revalidate the path
+  revalidatePath("/dashboard/invoices");
 }
