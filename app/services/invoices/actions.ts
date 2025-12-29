@@ -6,18 +6,18 @@ import { revalidatePath } from "next/cache";
 import postgres from "postgres";
 import { redirect } from "next/navigation";
 import dateToUTCDateString from "@/app/lib/formatters/date-to-utc-date-string";
+import currencyToDiscrete from "@/app/lib/formatters/currency-to-discrete";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
-
-const currencyToDiscrete = {
-  usd: (amount: number): number => Math.round(amount * 100),
-};
 
 const InvoiceSchema = z
   .object({
     id: z.string(),
     customerId: z.string().uuid(),
-    amount: z.coerce.number(),
+    amount: z.coerce
+      .number()
+      .max(Number.MAX_SAFE_INTEGER)
+      .min(Number.MIN_SAFE_INTEGER),
     status: z.enum(["paid", "pending"]),
     date: z.string().date(),
   })
@@ -26,15 +26,13 @@ const InvoiceSchema = z
 const CreateInvoice = InvoiceSchema.omit({ id: true, date: true }).strict();
 
 export async function createInvoice(formData: FormData) {
-  let validData;
-
   try {
     const rawData = {
       customerId: formData.get("customerId"),
       amount: formData.get("amount"),
       status: formData.get("status"),
     };
-    validData = CreateInvoice.parse(rawData);
+    const validData = CreateInvoice.parse(rawData);
 
     // Convert dollars to cents to eliminate floating point numbers
     // Using a map to convert it so we can support multiple currencies
@@ -54,4 +52,56 @@ export async function createInvoice(formData: FormData) {
     return;
   }
   redirect("/dashboard/invoices");
+}
+
+const UpdateInvoice = InvoiceSchema.omit({ date: true }).strict();
+
+export async function updateInvoiceById(id: string, formData: FormData) {
+  try {
+    // Validate and format the data
+    const rawData = {
+      id: id,
+      customerId: formData.get("customerId"),
+      amount: formData.get("amount"),
+      status: formData.get("status"),
+    };
+
+    const validData = UpdateInvoice.parse(rawData);
+
+    validData.amount = currencyToDiscrete["usd"](validData.amount);
+
+    // Update the invoice
+
+    await sql`
+    UPDATE invoices 
+    SET customer_id = ${validData.customerId}, amount = ${validData.amount}, status = ${validData.status} 
+    WHERE id = ${validData.id}`;
+
+    // Revalidate the invoices path to show latest data, and redirect to it
+    revalidatePath("/dashboard/invoices");
+  } catch (e) {
+    console.error(e);
+    return;
+  }
+  redirect("/dashboard/invoices");
+}
+
+const DeleteId = z.string().uuid();
+
+export async function deleteInvoiceById(id: string) {
+  try {
+    // validate the id
+    const validId = DeleteId.parse(id);
+
+    // delete the invoice
+    await sql`
+      DELETE FROM invoices where id = ${validId}
+    `;
+
+    // revalidate the path
+    revalidatePath("/dashboard/invoices");
+  } catch (e) {
+    console.error(e);
+    return;
+  }
 }
