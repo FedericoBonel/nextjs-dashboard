@@ -8,6 +8,7 @@ import {
   Revenue,
 } from "./definitions";
 import { formatCurrency } from "./utils";
+import discreteToCurrency from "./formatters/discrete-to-currency";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
@@ -146,13 +147,13 @@ export async function fetchInvoiceById(id: string) {
       WHERE invoices.id = ${id};
     `;
 
-    const invoice = data.map((invoice) => ({
-      ...invoice,
-      // Convert amount from cents to dollars
-      amount: invoice.amount / 100,
-    }));
+    const invoice = data[0];
 
-    return invoice[0];
+    if (!invoice) return undefined;
+
+    invoice.amount = discreteToCurrency["usd"](invoice.amount);
+
+    return invoice;
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch invoice.");
