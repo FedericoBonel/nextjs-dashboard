@@ -1,9 +1,10 @@
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Revenue } from "./definitions";
+import discreteToCurrency from "./formatters/discrete-to-currency";
 
 export const formatCurrency = (amount: number) => {
-  return (amount / 100).toLocaleString("en-US", {
+  return discreteToCurrency["usd"](amount).toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
   });
