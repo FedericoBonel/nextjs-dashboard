@@ -7,6 +7,10 @@ import postgres from "postgres";
 import { redirect } from "next/navigation";
 import dateToUTCDateString from "@/app/lib/formatters/date-to-utc-date-string";
 import currencyToDiscrete from "@/app/lib/formatters/currency-to-discrete";
+import {
+  createBadRequestError,
+  createInternalServerError,
+} from "./action-state";
 import { ActionState } from "./types";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
@@ -48,12 +52,7 @@ export async function createInvoice(
   const validationRes = CreateInvoice.safeParse(rawData);
 
   if (!validationRes.success) {
-    const errors = validationRes.error.flatten().fieldErrors;
-
-    return {
-      message: "The form contains errors. Please fix them and try again.",
-      errors,
-    };
+    return createBadRequestError(validationRes.error);
   }
 
   const validData = validationRes.data;
@@ -73,32 +72,37 @@ export async function createInvoice(
     revalidatePath("/dashboard/invoices");
   } catch (e) {
     console.error("Database error:", e);
-    return {
-      message: "An unexpected error occurred. Please try again.",
-      errors: {},
-    };
+    return createInternalServerError();
   }
   redirect("/dashboard/invoices");
 }
 
 const UpdateInvoice = InvoiceSchema.omit({ date: true }).strict();
 
-export async function updateInvoiceById(id: string, formData: FormData) {
+export async function updateInvoiceById(
+  id: string,
+  _previousState: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  // Validate and format the data
+  const rawData = {
+    id,
+    customerId: formData.get("customerId"),
+    amount: formData.get("amount"),
+    status: formData.get("status"),
+  };
+
+  const validationRes = UpdateInvoice.safeParse(rawData);
+
+  if (!validationRes.success) {
+    return createBadRequestError(validationRes.error);
+  }
+
+  const validData = validationRes.data;
+  validData.amount = currencyToDiscrete["usd"](validData.amount);
+
   try {
-    // Validate and format the data
-    const rawData = {
-      id: id,
-      customerId: formData.get("customerId"),
-      amount: formData.get("amount"),
-      status: formData.get("status"),
-    };
-
-    const validData = UpdateInvoice.parse(rawData);
-
-    validData.amount = currencyToDiscrete["usd"](validData.amount);
-
     // Update the invoice
-
     await sql`
     UPDATE invoices 
     SET customer_id = ${validData.customerId}, amount = ${validData.amount}, status = ${validData.status} 
@@ -108,7 +112,7 @@ export async function updateInvoiceById(id: string, formData: FormData) {
     revalidatePath("/dashboard/invoices");
   } catch (e) {
     console.error(e);
-    return;
+    return createInternalServerError();
   }
   redirect("/dashboard/invoices");
 }

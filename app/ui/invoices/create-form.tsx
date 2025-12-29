@@ -15,6 +15,7 @@ import { createInvoice } from "@/app/services/invoices/actions";
 import { ActionState } from "@/app/services/invoices/types";
 import Form from "@/app/ui/form/Form";
 import FieldErrors from "@/app/ui/form/FieldErrors";
+import FormError from "../form/FormError";
 
 const initialState: ActionState = {
   message: null,
@@ -142,11 +143,7 @@ export default function CreateInvoiceForm({
         <FieldErrors id="status-errors" errors={actionState.errors.status} />
       </fieldset>
 
-      {actionState.message && (
-        <div className="mt-4 border-t pt-1">
-          <FieldErrors id="form-errors" errors={[actionState.message]} />
-        </div>
-      )}
+      <FormError className="mt-4" message={actionState.message} />
     </Form>
   );
 }

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 interface FormErrorProps {
-  message: string;
+  message?: string | null;
   className?: string;
 }
 

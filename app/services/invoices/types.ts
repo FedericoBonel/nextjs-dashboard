@@ -1,4 +1,4 @@
 export interface ActionState {
   message: string | null;
-  errors: Record<string, string[]>;
+  errors: Record<string, string[] | undefined>;
 }
