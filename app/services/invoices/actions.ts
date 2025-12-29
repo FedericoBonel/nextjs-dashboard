@@ -5,17 +5,12 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import postgres from "postgres";
 import { redirect } from "next/navigation";
+import dateToUTCDateString from "@/app/lib/formatters/date-to-utc-date-string";
+
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 const currencyToDiscrete = {
   usd: (amount: number): number => Math.round(amount * 100),
-};
-
-const timestampToUTCDateString = (date: Date) => {
-  if (!(date instanceof Date)) throw new Error("date is not a Date object");
-
-  // Export the offset timestamp as YYYY-MM-DD
-  return date.toISOString().split("T")[0];
 };
 
 const InvoiceSchema = z
@@ -46,7 +41,7 @@ export async function createInvoice(formData: FormData) {
     validData.amount = currencyToDiscrete["usd"](validData.amount);
 
     // Get the created at date in international timezone, for some weird reason vercel team thought using "YYYY-MM-DD" is a good format... stupid
-    const createdAt = timestampToUTCDateString(new Date());
+    const createdAt = dateToUTCDateString(new Date());
 
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date) 
