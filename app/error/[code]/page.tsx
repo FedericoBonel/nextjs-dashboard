@@ -5,7 +5,7 @@ import Error from "@/app/ui/error";
 const defaultMessages = {
   icon: <BellAlertIcon className="w-24 text-gray-400" />,
   title: "Unexpected Error",
-  message: "Oops, it seems something went wrong",
+  message: "Oops, it seems something went wrong.",
 };
 
 const messagesForErrors: Record<
@@ -16,7 +16,7 @@ const messagesForErrors: Record<
   "404": {
     icon: <FaceFrownIcon className="w-24 text-gray-400" />,
     title: "404 Not found",
-    message: "We couldn't find what you were looking for",
+    message: "We couldn't find what you were looking for.",
   },
 };
 
