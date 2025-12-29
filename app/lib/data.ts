@@ -8,7 +8,7 @@ import {
   Revenue,
 } from "./definitions";
 import { formatCurrency } from "./utils";
-import discreteToCurrency from "./formatters/discrete-to-currency";
+import discreteToCurrency from "./utils/formatters/discrete-to-currency";
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 

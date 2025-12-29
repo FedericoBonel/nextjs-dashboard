@@ -9,9 +9,9 @@ import {
 
 import { CustomerField, InvoiceForm } from "@/app/lib/definitions";
 import Form from "@/app/ui/form/Form";
-import { updateInvoiceById } from "@/app/services/invoices/actions";
+import { updateInvoiceById } from "@/app/lib/services/invoices/actions";
 import { useActionState } from "react";
-import { ActionState } from "@/app/services/invoices/types";
+import { ActionState } from "@/app/lib/services/invoices/types";
 import { cn } from "@/app/lib/utils";
 import FieldErrors from "../FieldErrors";
 import FormError from "../form/FormError";
