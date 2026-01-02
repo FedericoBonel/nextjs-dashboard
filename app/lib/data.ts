@@ -3,23 +3,10 @@ import {
   CustomersTableType,
   InvoiceForm,
   InvoicesTable,
-  LatestInvoiceRaw,
-  Revenue,
 } from "./definitions";
 import { formatCurrency } from "./utils";
 import discreteToCurrency from "./utils/formatters/discrete-to-currency";
 import db from "./db/connection";
-
-export async function fetchRevenue() {
-  try {
-    const data = await db<Revenue[]>`SELECT * FROM revenue`;
-
-    return data;
-  } catch (error) {
-    console.error("Database Error:", error);
-    throw new Error("Failed to fetch revenue data.");
-  }
-}
 
 export async function fetchCardData() {
   try {
