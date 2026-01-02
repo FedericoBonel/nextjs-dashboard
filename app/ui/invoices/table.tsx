@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { UpdateInvoice, DeleteInvoice } from "@/app/ui/invoices/buttons";
 import InvoiceStatus from "@/app/ui/invoices/status";
+import { getInvoicesByQuery } from "@/app/lib/services/invoices";
 import { formatDateToLocal, formatCurrency } from "@/app/lib/utils";
-import { fetchFilteredInvoices } from "@/app/lib/data";
 import MESSAGES from "@/app/constants/messages";
 
 export default async function InvoicesTable({
@@ -12,7 +12,7 @@ export default async function InvoicesTable({
   query: string;
   currentPage: number;
 }) {
-  const invoices = await fetchFilteredInvoices(query, currentPage);
+  const invoices = await getInvoicesByQuery(query, currentPage);
 
   const smScreenTable = (
     <div className="md:hidden">
@@ -22,15 +22,15 @@ export default async function InvoicesTable({
             <div>
               <div className="mb-2 flex items-center">
                 <Image
-                  src={invoice.image_url}
+                  src={invoice.customer.image_url}
                   className="mr-2 rounded-full"
                   width={28}
                   height={28}
-                  alt={`${invoice.name}'s profile picture`}
+                  alt={`${invoice.customer.name}'s profile picture`}
                 />
-                <p>{invoice.name}</p>
+                <p>{invoice.customer.name}</p>
               </div>
-              <p className="text-sm text-gray-500">{invoice.email}</p>
+              <p className="text-sm text-gray-500">{invoice.customer.email}</p>
             </div>
             <InvoiceStatus status={invoice.status} />
           </div>
@@ -84,16 +84,18 @@ export default async function InvoicesTable({
             <td className="whitespace-nowrap py-3 pl-6 pr-3">
               <div className="flex items-center gap-3">
                 <Image
-                  src={invoice.image_url}
+                  src={invoice.customer.image_url}
                   className="rounded-full"
                   width={28}
                   height={28}
-                  alt={`${invoice.name}'s profile picture`}
+                  alt={`${invoice.customer.name}'s profile picture`}
                 />
-                <p>{invoice.name}</p>
+                <p>{invoice.customer.name}</p>
               </div>
             </td>
-            <td className="whitespace-nowrap px-3 py-3">{invoice.email}</td>
+            <td className="whitespace-nowrap px-3 py-3">
+              {invoice.customer.email}
+            </td>
             <td className="whitespace-nowrap px-3 py-3">
               {formatCurrency(invoice.amount)}
             </td>
