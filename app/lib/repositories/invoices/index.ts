@@ -51,3 +51,43 @@ export async function getInvoicesBy(
     throw new Error("Failed to fetch invoices.");
   }
 }
+
+/** Counts the total number of invoices */
+export const countInvoices = async () => {
+  try {
+    const count = await db`SELECT COUNT(*) FROM invoices`;
+
+    return Number(count[0].count ?? 0);
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to count invoices.");
+  }
+};
+
+/** Sums the total amount of invoices grouping by status */
+export const getInvoicesAmountGroupByStatus = async () => {
+  try {
+    const counts = await db`
+      SELECT 
+        SUM(
+          CASE WHEN status = 'paid' 
+          THEN amount 
+          ELSE 0 END
+        ) as paid,
+        SUM(
+          CASE WHEN status = 'pending' 
+          THEN amount 
+          ElSE 0 END
+        ) as pending
+      FROM invoices
+    `;
+
+    return {
+      paid: Number(counts[0].paid ?? 0),
+      pending: Number(counts[0].pending ?? 0),
+    };
+  } catch (error) {
+    console.log("Database Error:", error);
+    throw new Error("Failed to count invoices by status.");
+  }
+};

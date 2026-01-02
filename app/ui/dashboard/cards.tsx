@@ -5,8 +5,9 @@ import {
   InboxIcon,
 } from "@heroicons/react/24/outline";
 import { lusitana } from "@/app/ui/fonts";
-import { fetchCardData } from "@/app/lib/data";
+import { countCustomersAndInvoicesAndRevenue } from "@/app/lib/services/reports";
 import MESSAGES from "@/app/constants/messages";
+import { formatCurrency } from "@/app/lib/utils";
 
 const iconMap = {
   collected: BanknotesIcon,
@@ -16,33 +17,29 @@ const iconMap = {
 };
 
 export default async function CardWrapper() {
-  const {
-    totalPaidInvoices,
-    totalPendingInvoices,
-    numberOfCustomers,
-    numberOfInvoices,
-  } = await fetchCardData();
+  const { totalCustomers, totalInvoices, totalAmountByStatus } =
+    await countCustomersAndInvoicesAndRevenue();
 
   return (
     <>
       <Card
         title={MESSAGES.dashboardCollectInvTitle}
-        value={totalPaidInvoices}
+        value={formatCurrency(totalAmountByStatus.paid)}
         type="collected"
       />
       <Card
         title={MESSAGES.dashboardPendingInvTitle}
-        value={totalPendingInvoices}
+        value={formatCurrency(totalAmountByStatus.pending)}
         type="pending"
       />
       <Card
         title={MESSAGES.dashboardTotalInvTitle}
-        value={numberOfInvoices}
+        value={totalInvoices}
         type="invoices"
       />
       <Card
         title={MESSAGES.dashboardCustomersTitle}
-        value={numberOfCustomers}
+        value={totalCustomers}
         type="customers"
       />
     </>
