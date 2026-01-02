@@ -1,5 +1,6 @@
 import db from "@/app/lib/db/connection";
 import { createInvoice } from "@/app/lib/models/invoices";
+import { RowList } from "postgres";
 
 /** Gets the invoices of the given page and limit for the given query */
 export async function getInvoicesBy(
@@ -52,10 +53,24 @@ export async function getInvoicesBy(
   }
 }
 
-/** Counts the total number of invoices */
-export const countInvoices = async () => {
+/** Counts the total number of invoices for the given query */
+export const countInvoicesBy = async (query?: string) => {
   try {
-    const count = await db`SELECT COUNT(*) FROM invoices`;
+    let count: RowList<{ count: number }[]>;
+    if (!query) {
+      count = await db`SELECT COUNT(*) FROM invoices`;
+    } else {
+      count = await db`
+      SELECT COUNT(*) FROM invoices 
+      JOIN customers ON invoices.customer_id = customers.id
+      WHERE
+        customers.name ILIKE ${`%${query}%`} OR
+        customers.email ILIKE ${`%${query}%`} OR
+        invoices.amount::text ILIKE ${`%${query}%`} OR
+        invoices.date::text ILIKE ${`%${query}%`} OR
+        invoices.status ILIKE ${`%${query}%`}
+      `;
+    }
 
     return Number(count[0].count ?? 0);
   } catch (error) {

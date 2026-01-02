@@ -1,12 +1,12 @@
 import { countCustomers } from "@/app/lib/repositories/customers";
 import {
-  countInvoices,
+  countInvoicesBy,
   getInvoicesAmountGroupByStatus,
 } from "@/app/lib/repositories/invoices";
 
 /** Gets the total amount of customers and invoices as well as the revenue grouped by status */
 export const countCustomersAndInvoicesAndRevenue = async () => {
-  const totalInvoicesPromise = countInvoices();
+  const totalInvoicesPromise = countInvoicesBy();
   const invoicesByStatusPromise = getInvoicesAmountGroupByStatus();
   const totalCustomersPromise = countCustomers();
 

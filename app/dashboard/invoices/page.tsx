@@ -3,10 +3,10 @@ import Search from "@/app/ui/search";
 import { CreateInvoice } from "@/app/ui/invoices/buttons";
 import Table from "@/app/ui/invoices/table";
 import Pagination from "@/app/ui/invoices/pagination";
+import { getInvoicePageCount } from "@/app/lib/services/invoices";
 import MESSAGES from "@/app/constants/messages";
 import { Suspense } from "react";
 import { InvoicesTableSkeleton } from "@/app/ui/skeletons";
-import { fetchInvoicesPages } from "@/app/lib/data";
 
 const Invoices = async (props: {
   searchParams?: Promise<{ query?: string; page?: string }>;
@@ -15,7 +15,7 @@ const Invoices = async (props: {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const page = Number(searchParams?.page) || 1;
-  const numberPages = await fetchInvoicesPages(query);
+  const numberPages = await getInvoicePageCount(query);
 
   return (
     <div className="w-full">
