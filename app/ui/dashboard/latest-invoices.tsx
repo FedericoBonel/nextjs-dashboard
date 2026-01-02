@@ -2,12 +2,12 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 
 import { lusitana } from "@/app/ui/fonts";
-import { fetchLatestInvoices } from "@/app/lib/data";
+import { getLatestInvoices } from "@/app/lib/services/invoices";
 import MESSAGES from "@/app/constants/messages";
-import { cn } from "@/app/lib/utils";
+import { cn, formatCurrency } from "@/app/lib/utils";
 
 export default async function LatestInvoices() {
-  const latestInvoices = await fetchLatestInvoices();
+  const latestInvoices = await getLatestInvoices();
 
   return (
     <div className="flex w-full flex-col md:col-span-4">
@@ -29,25 +29,25 @@ export default async function LatestInvoices() {
               >
                 <div className="flex items-center">
                   <Image
-                    src={invoice.image_url}
-                    alt={`${invoice.name}'s profile picture`}
+                    src={invoice.customer.image_url}
+                    alt={`${invoice.customer.name}'s profile picture`}
                     className="mr-4 rounded-full"
                     width={32}
                     height={32}
                   />
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold md:text-base">
-                      {invoice.name}
+                      {invoice.customer.name}
                     </p>
                     <p className="hidden text-sm text-gray-500 sm:block">
-                      {invoice.email}
+                      {invoice.customer.email}
                     </p>
                   </div>
                 </div>
                 <p
                   className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
                 >
-                  {invoice.amount}
+                  {formatCurrency(invoice.amount)}
                 </p>
               </div>
             );
