@@ -32,9 +32,7 @@ export async function getInvoicesBy(
       LIMIT ${limit} OFFSET ${offset}
     `;
 
-    console.log("Fetched Invoices:", invoices);
-
-    const toReturn = invoices.map((inv) =>
+    return invoices.map((inv) =>
       createInvoice({
         id: inv.id,
         amount: Number(inv.amount),
@@ -48,8 +46,6 @@ export async function getInvoicesBy(
         },
       })
     );
-
-    return toReturn;
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch invoices.");
