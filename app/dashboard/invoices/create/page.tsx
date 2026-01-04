@@ -1,6 +1,6 @@
 import CreateInvoiceForm from "@/app/ui/invoices/create-form";
 import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
-import { fetchCustomers } from "@/app/lib/data";
+import { getCustomers } from "@/app/lib/services/customers";
 
 const BREADCRUMBS = [
   { label: "Invoices", href: "/dashboard/invoices" },
@@ -8,7 +8,7 @@ const BREADCRUMBS = [
 ];
 
 const CreateInvoicePage = async () => {
-  const allCustomers = await fetchCustomers();
+  const allCustomers = await getCustomers();
 
   return (
     <main>

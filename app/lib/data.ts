@@ -5,23 +5,6 @@ import {
 import { formatCurrency } from "./utils";
 import db from "./db/connection";
 
-export async function fetchCustomers() {
-  try {
-    const customers = await db<CustomerField[]>`
-      SELECT
-        id,
-        name
-      FROM customers
-      ORDER BY name ASC
-    `;
-
-    return customers;
-  } catch (err) {
-    console.error("Database Error:", err);
-    throw new Error("Failed to fetch all customers.");
-  }
-}
-
 export async function fetchFilteredCustomers(query: string) {
   try {
     const data = await db<CustomersTableType[]>`

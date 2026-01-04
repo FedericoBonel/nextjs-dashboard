@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import UpdateInvoiceForm from "@/app/ui/invoices/edit-form";
 import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
 import { getInvoice } from "@/app/lib/services/invoices";
-import { fetchCustomers } from "@/app/lib/data";
+import { getCustomers } from "@/app/lib/services/customers";
 
 const createBreadcrumbs = (invoiceId: string) => [
   { label: "Invoices", href: "/dashboard/invoices" },
@@ -20,7 +20,7 @@ export default async function UpdateInvoicePage({
 }) {
   const { id } = await params;
   const [customers, invoice] = await Promise.all([
-    fetchCustomers(),
+    getCustomers(),
     getInvoice(id),
   ]);
 

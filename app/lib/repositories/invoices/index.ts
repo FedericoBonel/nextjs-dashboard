@@ -45,6 +45,7 @@ export async function getInvoicesBy(
   page: number,
   query: string
 ) {
+  // TODO: Move this to utils and call it from the service layer, this repo should only handle db operations
   const offset = (page - 1) * limit;
 
   try {
