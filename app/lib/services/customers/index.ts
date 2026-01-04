@@ -1,6 +1,15 @@
-import { getAllCustomers } from "../../repositories/customers";
+import {
+  getAllCustomers,
+  getAllCustomersWithInvoiceSums,
+} from "@/app/lib/repositories/customers";
+import { MAX_ENTITY_LOAD } from "@/app/lib/services/utils/constants";
 
 /** Gets all customers */
 export const getCustomers = async () => {
-  return await getAllCustomers();
+  return await getAllCustomers(0, MAX_ENTITY_LOAD);
+};
+
+/** Gets all customers with the amount of paid and unpaid invoices for a text query */
+export const getCustomersByQuery = (query: string) => {
+  return getAllCustomersWithInvoiceSums(0, MAX_ENTITY_LOAD, query);
 };

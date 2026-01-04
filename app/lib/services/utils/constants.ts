@@ -1,0 +1,1 @@
+export const MAX_ENTITY_LOAD = 10_000;
