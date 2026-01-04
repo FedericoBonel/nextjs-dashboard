@@ -1,4 +1,4 @@
-import { ActionState } from "@/app/lib/services/invoices/types";
+import { ActionState } from "@/app/lib/controllers/types";
 
 const FieldErrors = ({
   id,

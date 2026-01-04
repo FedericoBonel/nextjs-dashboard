@@ -1,6 +1,26 @@
 import db from "@/app/lib/db/connection";
 import { createCustomer } from "@/app/lib/models/customer";
 
+/** Gets a customer by id */
+export const getCustomerById = async (id: string) => {
+  if (!id) {
+    throw new Error("An id for the customer to get wasn't provided")
+  }
+
+  try {
+    const foundCustomer = await db`SELECT * FROM customers WHERE id = ${id}`;
+
+    if (!foundCustomer[0]) {
+      return undefined;
+    }
+
+    return createCustomer(foundCustomer[0]);
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch customer by id.");
+  }
+};
+
 /** Counts the number of customers */
 export const countCustomers = async () => {
   try {
@@ -16,7 +36,8 @@ export const countCustomers = async () => {
 /** Gets all the customers */
 export const getAllCustomers = async (offset: number, limit: number) => {
   try {
-    const customers = await db`SELECT * FROM customers ORDER BY name ASC OFFSET ${offset} LIMIT ${limit}`;
+    const customers =
+      await db`SELECT * FROM customers ORDER BY name ASC OFFSET ${offset} LIMIT ${limit}`;
 
     return customers.map(createCustomer);
   } catch (error) {

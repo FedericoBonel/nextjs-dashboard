@@ -1,4 +1,4 @@
-import { ZodError } from "zod";
+import { InvalidResult } from "@/app/lib/validators/create-validation-result";
 import { ActionState } from "./types";
 
 export const initialState: ActionState = {
@@ -26,20 +26,20 @@ export const createErrorState = (
 };
 
 export const createBadRequestError = <T>(
-  errors?: ZodError<T>,
+  errors?: InvalidResult<T>["errors"],
   message = errorMessageByCode[400]
-) => {
-  const parsedErrors = errors?.flatten().fieldErrors;
-
-  return createErrorState(400, message, parsedErrors);
+): ActionState => {
+  return createErrorState(400, message, errors);
 };
 
 export const createInternalServerError = (
   message = errorMessageByCode[500]
-) => {
+): ActionState => {
   return createErrorState(500, message);
 };
 
-export const createNotFoundError = () => {
-  return createErrorState(404);
+export const createNotFoundError = (
+  message = errorMessageByCode[404]
+): ActionState => {
+  return createErrorState(404, message);
 };

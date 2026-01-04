@@ -2,14 +2,32 @@ import {
   countInvoicesBy,
   getInvoiceById,
   getAllInvoicesBy,
+  insertInvoice,
+  updateInvoiceById,
+  deleteInvoiceById,
 } from "@/app/lib/repositories/invoices";
+import { getCustomerById } from "@/app/lib/repositories/customers";
+import { CreateInvoiceDTO } from "@/app/lib/validators/dtos/invoices/create-invoice";
+import { UpdateInvoiceDTO } from "@/app/lib/validators/dtos/invoices/update-invoice";
+import NotFoundError from "@/app/lib/utils/errors/NotFoundError";
+import {
+  createInvoiceDTOToInvoice,
+  invoiceToInvoiceDetailsDTO,
+  updateInvoiceDTOToInvoice,
+} from "../utils/transformers/invoices";
 import getOffsetFromPage from "../utils/get-offset-from-page";
 
 const DEFAULT_LIMIT = 5;
 
+// TODO: Move all to use DTOs
+
 /** Gets an invoice by id */
 export const getInvoice = async (id: string) => {
-  return getInvoiceById(id);
+  const invoice = await getInvoiceById(id);
+
+  if (!invoice) return undefined;
+
+  return invoiceToInvoiceDetailsDTO(invoice);
 };
 
 /** Gets the latest invoices with the given limit */
@@ -38,4 +56,53 @@ export const getInvoicePageCount = async (
   const totalInvoices = await countInvoicesBy(query);
 
   return Math.ceil(totalInvoices / limit);
+};
+
+/** Creates a new invoice */
+export const saveInvoice = async (NewInvoice: CreateInvoiceDTO) => {
+  const foundCustomer = await getCustomerById(NewInvoice.customerId);
+
+  if (!foundCustomer) {
+    throw new NotFoundError("The customer couldn't be found");
+  }
+
+  const savedInvoice = await insertInvoice(
+    createInvoiceDTOToInvoice(NewInvoice, foundCustomer)
+  );
+
+  return invoiceToInvoiceDetailsDTO(savedInvoice);
+};
+
+/** Updates an invoice by id */
+export const updateInvoice = async (
+  id: string,
+  UpdatedInvoice: UpdateInvoiceDTO
+) => {
+  const foundCustomer = await getCustomerById(UpdatedInvoice.customerId);
+
+  if (!foundCustomer) {
+    throw new NotFoundError("The customer couldn't be found");
+  }
+
+  const savedInvoice = await updateInvoiceById(
+    id,
+    updateInvoiceDTOToInvoice(UpdatedInvoice, foundCustomer)
+  );
+
+  if (!savedInvoice) {
+    throw new NotFoundError("The invoice couldn't be found");
+  }
+
+  return invoiceToInvoiceDetailsDTO(savedInvoice);
+};
+
+/** Deletes an invoice by id */
+export const deleteInvoice = async (id: string) => {
+  const deletedInvoice = await deleteInvoiceById(id);
+
+  if (!deletedInvoice) {
+    throw new NotFoundError("The invoice couldn't be found");
+  }
+
+  return invoiceToInvoiceDetailsDTO(deletedInvoice);
 };

@@ -1,9 +1,15 @@
 import { RowList } from "postgres";
 import db from "@/app/lib/db/connection";
-import { createInvoice } from "@/app/lib/models/invoices";
+import { createInvoice, Invoice } from "@/app/lib/models/invoices";
+import { getCustomerById } from "@/app/lib/repositories/customers";
+import dateToUTCDateString from "@/app/lib/utils/formatters/date-to-utc-date-string";
 
 /** Gets an invoice by id */
 export const getInvoiceById = async (id: string) => {
+  if (!id) {
+    throw new Error("An id for the invoice to get wasn't provided");
+  }
+
   try {
     const data = await db`
       SELECT 
@@ -137,7 +143,79 @@ export const getInvoicesAmountGroupByStatus = async () => {
       pending: Number(counts[0].pending ?? 0),
     };
   } catch (error) {
-    console.log("Database Error:", error);
+    console.error("Database Error:", error);
     throw new Error("Failed to count invoices by status.");
+  }
+};
+
+/** Creates an invoice */
+export const insertInvoice = async (newInvoice: Omit<Invoice, "id">) => {
+  try {
+    const createdAt = dateToUTCDateString(newInvoice.date);
+
+    const savedInvoice = await db`
+      INSERT INTO invoices (customer_id, amount, status, date) 
+      VALUES (${newInvoice.customer.id}, ${newInvoice.amount}, ${newInvoice.status}, ${createdAt})
+      RETURNING *
+    `;
+
+    return createInvoice({ ...savedInvoice[0], customer: newInvoice.customer });
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to create invoice.");
+  }
+};
+
+/** Updates an invoice by id */
+export const updateInvoiceById = async (
+  id: string,
+  updatedInvoice: Omit<Invoice, "id" | "date">
+) => {
+  if (!id) {
+    throw new Error("An id for the invoice to be updated wasn't provided");
+  }
+
+  try {
+    const savedInvoice = await db`
+      UPDATE invoices 
+      SET customer_id = ${updatedInvoice.customer.id}, amount = ${updatedInvoice.amount}, status = ${updatedInvoice.status} 
+      WHERE id = ${id}
+      RETURNING *
+    `;
+
+    if (!savedInvoice[0]) return undefined;
+
+    return createInvoice({
+      ...savedInvoice[0],
+      customer: updatedInvoice.customer,
+    });
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to update invoice.");
+  }
+};
+
+/** Deletes an invoice by id */
+export const deleteInvoiceById = async (id: string) => {
+  if (!id) {
+    throw new Error("An id for the invoice to be deleted wasn't provided");
+  }
+
+  try {
+    const deletedInvoice = await db`
+      DELETE 
+      FROM invoices
+      WHERE id = ${id}
+      RETURNING *
+    `;
+
+    if (!deletedInvoice[0] || !deletedInvoice[0].customer_id) return undefined;
+
+    const customer = await getCustomerById(deletedInvoice[0].customer_id);
+
+    return createInvoice({ ...deletedInvoice[0], customer });
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to delete invoice.");
   }
 };

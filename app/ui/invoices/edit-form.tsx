@@ -10,8 +10,8 @@ import {
 
 import { CustomerField } from "@/app/lib/definitions";
 import { Invoice } from "@/app/lib/models/invoices";
-import { updateInvoiceById } from "@/app/lib/services/invoices/actions";
-import { ActionState } from "@/app/lib/services/invoices/types";
+import { updateInvoiceById } from "@/app/lib/controllers/invoices/actions";
+import { ActionState } from "@/app/lib/controllers/types";
 import discreteToCurrency from "@/app/lib/utils/formatters/discrete-to-currency";
 import { cn } from "@/app/lib/utils";
 import Form from "@/app/ui/form/Form";
