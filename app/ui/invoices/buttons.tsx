@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { deleteInvoiceById } from "@/app/lib/controllers/invoices/actions";
+import { deleteInvoiceById } from "@/api/controllers/invoices/actions";
 import { cn } from "@/app/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -41,6 +41,7 @@ export function DeleteInvoice({ id }: { id: string }) {
       setIsDeleting(false);
       router.push("/error/500");
     }
+    return;
   };
 
   return (

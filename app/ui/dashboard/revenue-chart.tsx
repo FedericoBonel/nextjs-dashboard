@@ -1,5 +1,5 @@
-import { getRevenue } from "@/app/lib/services/revenue";
 import { CalendarIcon } from "@heroicons/react/24/outline";
+import { getRevenue } from "@/api/services/revenue";
 import { lusitana } from "@/app/ui/fonts";
 import MESSAGES from "@/app/constants/messages";
 import { generateYAxis } from "@/app/lib/utils";

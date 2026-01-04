@@ -1,11 +1,11 @@
-import { Customer } from "@/app/lib/models/customer";
-import { Invoice } from "@/app/lib/models/invoices";
-import { CreateInvoiceDTO } from "@/app/lib/validators/dtos/invoices/create-invoice";
-import { UpdateInvoiceDTO } from "@/app/lib/validators/dtos/invoices/update-invoice";
+import { Customer } from "@/api/models/customer";
+import { Invoice } from "@/api/models/invoices";
+import { CreateInvoiceDTO } from "@/api/validators/dtos/invoices/create-invoice";
+import { UpdateInvoiceDTO } from "@/api/validators/dtos/invoices/update-invoice";
 import validateInvoiceDetailsDTO, {
   InvoiceDetailsDTO,
-} from "@/app/lib/validators/dtos/invoices/invoice-details";
-import InternalServerError from "@/app/lib/utils/errors/InternalServerError";
+} from "@/api/validators/dtos/invoices/invoice-details";
+import InternalServerError from "@/api/utils/errors/InternalServerError";
 
 /** Converts an invoice as received from the web to be created to an Invoice model */
 export const createInvoiceDTOToInvoice = (

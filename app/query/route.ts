@@ -1,4 +1,4 @@
-import db from "@/app/lib/db/connection";
+import db from "@/api/db/connection";
 
 async function listInvoices() {
   const data = await db`

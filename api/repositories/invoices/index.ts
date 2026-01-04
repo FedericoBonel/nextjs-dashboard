@@ -1,7 +1,7 @@
 import { RowList } from "postgres";
-import db from "@/app/lib/db/connection";
-import { createInvoice, Invoice } from "@/app/lib/models/invoices";
-import { getCustomerById } from "@/app/lib/repositories/customers";
+import db from "@/api/db/connection";
+import { createInvoice, Invoice } from "@/api/models/invoices";
+import { getCustomerById } from "@/api/repositories/customers";
 import dateToUTCDateString from "@/app/lib/utils/formatters/date-to-utc-date-string";
 
 /** Gets an invoice by id */

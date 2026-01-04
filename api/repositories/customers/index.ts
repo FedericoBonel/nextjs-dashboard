@@ -1,5 +1,5 @@
-import db from "@/app/lib/db/connection";
-import { createCustomer } from "@/app/lib/models/customer";
+import db from "@/api/db/connection";
+import { createCustomer } from "@/api/models/customer";
 
 /** Gets a customer by id */
 export const getCustomerById = async (id: string) => {
