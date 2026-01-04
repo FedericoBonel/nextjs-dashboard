@@ -1,37 +1,9 @@
 import {
   CustomerField,
   CustomersTableType,
-  InvoiceForm,
-  InvoicesTable,
 } from "./definitions";
 import { formatCurrency } from "./utils";
-import discreteToCurrency from "./utils/formatters/discrete-to-currency";
 import db from "./db/connection";
-
-export async function fetchInvoiceById(id: string) {
-  try {
-    const data = await db<InvoiceForm[]>`
-      SELECT
-        invoices.id,
-        invoices.customer_id,
-        invoices.amount,
-        invoices.status
-      FROM invoices
-      WHERE invoices.id = ${id};
-    `;
-
-    const invoice = data[0];
-
-    if (!invoice) return undefined;
-
-    invoice.amount = discreteToCurrency["usd"](invoice.amount);
-
-    return invoice;
-  } catch (error) {
-    console.error("Database Error:", error);
-    throw new Error("Failed to fetch invoice.");
-  }
-}
 
 export async function fetchCustomers() {
   try {

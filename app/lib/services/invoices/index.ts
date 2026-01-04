@@ -1,9 +1,15 @@
 import {
   countInvoicesBy,
+  getInvoiceById,
   getInvoicesBy,
 } from "@/app/lib/repositories/invoices";
 
 const DEFAULT_LIMIT = 5;
+
+/** Gets an invoice by id */
+export const getInvoice = async (id: string) => {
+  return getInvoiceById(id);
+};
 
 /** Gets the latest invoices with the given limit */
 export const getLatestInvoices = async (limit = DEFAULT_LIMIT) => {

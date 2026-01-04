@@ -1,6 +1,43 @@
+import { RowList } from "postgres";
 import db from "@/app/lib/db/connection";
 import { createInvoice } from "@/app/lib/models/invoices";
-import { RowList } from "postgres";
+
+/** Gets an invoice by id */
+export const getInvoiceById = async (id: string) => {
+  try {
+    const data = await db`
+      SELECT 
+        invoices.id,
+        invoices.amount,
+        invoices.date,
+        invoices.status,
+        customers.id as customer_id,
+        customers.name,
+        customers.email,
+        customers.image_url
+      FROM invoices JOIN customers ON invoices.customer_id = customers.id 
+      WHERE invoices.id = ${id}
+    `;
+
+    if (!data[0]) return undefined;
+
+    return createInvoice({
+      id: data[0].id,
+      amount: Number(data[0].amount),
+      date: data[0].date,
+      status: data[0].status,
+      customer: {
+        id: data[0].customer_id,
+        name: data[0].name,
+        email: data[0].email,
+        image_url: data[0].image_url,
+      },
+    });
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch invoice.");
+  }
+};
 
 /** Gets the invoices of the given page and limit for the given query */
 export async function getInvoicesBy(

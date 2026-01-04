@@ -1,5 +1,6 @@
 "use client";
 
+import { useActionState } from "react";
 import {
   CheckIcon,
   ClockIcon,
@@ -7,14 +8,15 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 
-import { CustomerField, InvoiceForm } from "@/app/lib/definitions";
-import Form from "@/app/ui/form/Form";
+import { CustomerField } from "@/app/lib/definitions";
+import { Invoice } from "@/app/lib/models/invoices";
 import { updateInvoiceById } from "@/app/lib/services/invoices/actions";
-import { useActionState } from "react";
 import { ActionState } from "@/app/lib/services/invoices/types";
+import discreteToCurrency from "@/app/lib/utils/formatters/discrete-to-currency";
 import { cn } from "@/app/lib/utils";
-import FieldErrors from "../FieldErrors";
-import FormError from "../form/FormError";
+import Form from "@/app/ui/form/Form";
+import FormError from "@/app/ui/form/FormError";
+import FieldErrors from "@/app/ui/FieldErrors";
 
 const initialState: ActionState = {
   message: "",
@@ -25,7 +27,7 @@ export default function EditInvoiceForm({
   invoice,
   customers,
 }: {
-  invoice: InvoiceForm;
+  invoice: Invoice;
   customers: CustomerField[];
 }) {
   const boundUpdateInvoiceById = updateInvoiceById.bind(null, invoice.id);
@@ -53,7 +55,7 @@ export default function EditInvoiceForm({
               "peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500",
               formState.errors.customerId && "border-red-500"
             )}
-            defaultValue={invoice.customer_id}
+            defaultValue={invoice.customer.id}
             aria-describedby="customerId-errors"
           >
             <option value="" disabled>
@@ -85,7 +87,7 @@ export default function EditInvoiceForm({
               name="amount"
               type="number"
               step="0.01"
-              defaultValue={invoice.amount}
+              defaultValue={discreteToCurrency["usd"](invoice.amount)}
               placeholder="Enter USD amount"
               className={cn(
                 "peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500",
