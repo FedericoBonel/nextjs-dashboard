@@ -39,15 +39,12 @@ export const getInvoiceById = async (id: string) => {
   }
 };
 
-/** Gets the invoices of the given page and limit for the given query */
-export async function getInvoicesBy(
+/** Gets the invoices that match the text search query */
+export async function getAllInvoicesBy(
+  offset: number,
   limit: number,
-  page: number,
-  query: string
+  textSearch: string
 ) {
-  // TODO: Move this to utils and call it from the service layer, this repo should only handle db operations
-  const offset = (page - 1) * limit;
-
   try {
     const invoices = await db`
       SELECT
@@ -62,11 +59,11 @@ export async function getInvoicesBy(
       FROM invoices
       JOIN customers ON invoices.customer_id = customers.id
       WHERE
-        customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`} OR
-        invoices.amount::text ILIKE ${`%${query}%`} OR
-        invoices.date::text ILIKE ${`%${query}%`} OR
-        invoices.status ILIKE ${`%${query}%`}
+        customers.name ILIKE ${`%${textSearch}%`} OR
+        customers.email ILIKE ${`%${textSearch}%`} OR
+        invoices.amount::text ILIKE ${`%${textSearch}%`} OR
+        invoices.date::text ILIKE ${`%${textSearch}%`} OR
+        invoices.status ILIKE ${`%${textSearch}%`}
       ORDER BY invoices.date DESC, customers.name ASC
       LIMIT ${limit} OFFSET ${offset}
     `;
@@ -91,22 +88,22 @@ export async function getInvoicesBy(
   }
 }
 
-/** Counts the total number of invoices for the given query */
-export const countInvoicesBy = async (query?: string) => {
+/** Counts the total number of invoices for the given text search query */
+export const countInvoicesBy = async (textSearch?: string) => {
   try {
     let count: RowList<{ count: number }[]>;
-    if (!query) {
+    if (!textSearch) {
       count = await db`SELECT COUNT(*) FROM invoices`;
     } else {
       count = await db`
       SELECT COUNT(*) FROM invoices 
       JOIN customers ON invoices.customer_id = customers.id
       WHERE
-        customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`} OR
-        invoices.amount::text ILIKE ${`%${query}%`} OR
-        invoices.date::text ILIKE ${`%${query}%`} OR
-        invoices.status ILIKE ${`%${query}%`}
+        customers.name ILIKE ${`%${textSearch}%`} OR
+        customers.email ILIKE ${`%${textSearch}%`} OR
+        invoices.amount::text ILIKE ${`%${textSearch}%`} OR
+        invoices.date::text ILIKE ${`%${textSearch}%`} OR
+        invoices.status ILIKE ${`%${textSearch}%`}
       `;
     }
 
@@ -117,7 +114,7 @@ export const countInvoicesBy = async (query?: string) => {
   }
 };
 
-/** Sums the total amount of invoices grouping by status */
+/** Sums the total money amount of invoices grouping by status */
 export const getInvoicesAmountGroupByStatus = async () => {
   try {
     const counts = await db`

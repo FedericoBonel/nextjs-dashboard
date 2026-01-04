@@ -1,8 +1,9 @@
 import {
   countInvoicesBy,
   getInvoiceById,
-  getInvoicesBy,
+  getAllInvoicesBy,
 } from "@/app/lib/repositories/invoices";
+import getOffsetFromPage from "../utils/get-offset-from-page";
 
 const DEFAULT_LIMIT = 5;
 
@@ -13,12 +14,20 @@ export const getInvoice = async (id: string) => {
 
 /** Gets the latest invoices with the given limit */
 export const getLatestInvoices = async (limit = DEFAULT_LIMIT) => {
-  return getInvoicesBy(limit, 1, "");
+  const offset = getOffsetFromPage(1, limit);
+
+  return getAllInvoicesBy(offset, limit, "");
 };
 
 /** Gets the invoices for the given page by query */
-export const getInvoicesByQuery = async (query: string, page: number) => {
-  return getInvoicesBy(DEFAULT_LIMIT, page, query);
+export const getInvoicesByQuery = async (
+  query: string,
+  page: number,
+  limit = DEFAULT_LIMIT
+) => {
+  const offset = getOffsetFromPage(page, limit);
+
+  return getAllInvoicesBy(offset, limit, query);
 };
 
 /** Gets the number of invoice pages for the given query and limit */

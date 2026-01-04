@@ -1,6 +1,6 @@
-import { getRevenueBy } from "@/app/lib/repositories/revenue";
+import { getAllRevenues } from "@/app/lib/repositories/revenue";
 
 /** Get all revenue data */
 export const getRevenue = async () => {
-  return await getRevenueBy();
+  return await getAllRevenues();
 };
