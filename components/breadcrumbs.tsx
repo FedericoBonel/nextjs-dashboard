@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { lusitana } from "@/app/ui/fonts";
+import { lusitana } from "@/components/fonts";
 import { cn } from "@/app/lib/utils";
 
 interface Breadcrumb {

@@ -1,6 +1,6 @@
 // Good practice to import global styles in this root layout
-import "@/app/ui/global.css";
-import { inter } from "@/app/ui/fonts";
+import "@/components/global.css";
+import { inter } from "@/components/fonts";
 
 export default function RootLayout({
   children,

@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import Header from "@/app/ui/header";
-import Search from "@/app/ui/search";
-import Pagination from "@/app/ui/pagination";
+import Header from "@/components/header";
+import Search from "@/components/search";
+import Pagination from "@/components/pagination";
 import { getInvoicePageCount } from "@/apis/services/invoices";
 import MESSAGES from "@/app/constants/messages";
-import { InvoicesTableSkeleton } from "@/app/ui/skeletons";
+import { InvoicesTableSkeleton } from "@/components/skeletons";
 import { CreateInvoice } from "./components/buttons";
 import Table from "./components/table";
 

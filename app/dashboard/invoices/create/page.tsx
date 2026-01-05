@@ -1,4 +1,4 @@
-import Breadcrumbs from "@/app/ui/breadcrumbs";
+import Breadcrumbs from "@/components/breadcrumbs";
 import { getCustomers } from "@/apis/services/customers";
 import CreateInvoiceForm from "./create-form";
 

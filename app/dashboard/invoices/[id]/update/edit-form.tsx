@@ -14,9 +14,9 @@ import { updateInvoiceById } from "@/apis/controllers/invoices/actions";
 import { ActionState } from "@/apis/controllers/types";
 import discreteToCurrency from "@/app/lib/utils/formatters/discrete-to-currency";
 import { cn } from "@/app/lib/utils";
-import Form from "@/app/ui/form/Form";
-import FormError from "@/app/ui/form/FormError";
-import FieldErrors from "@/app/ui/form/FieldErrors";
+import Form from "@/components/form/Form";
+import FormError from "@/components/form/FormError";
+import FieldErrors from "@/components/form/FieldErrors";
 
 const initialState: ActionState = {
   message: "",

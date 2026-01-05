@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 import { FaceFrownIcon } from "@heroicons/react/24/outline";
 
-import Error from "@/app/ui/error";
+import Error from "@/components/error";
 
 /**
  * This component renders when the nested segment uses `notFound()`.

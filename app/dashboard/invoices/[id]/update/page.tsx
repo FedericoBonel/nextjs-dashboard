@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import Breadcrumbs from "@/app/ui/breadcrumbs";
+import Breadcrumbs from "@/components/breadcrumbs";
 import { getInvoice } from "@/apis/services/invoices";
 import { getCustomers } from "@/apis/services/customers";
 import UpdateInvoiceForm from "./edit-form";

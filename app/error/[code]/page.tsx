@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { BellAlertIcon, FaceFrownIcon } from "@heroicons/react/24/outline";
-import Error from "@/app/ui/error";
+import Error from "@/components/error";
 
 const defaultMessages = {
   icon: <BellAlertIcon className="w-24 text-gray-400" />,

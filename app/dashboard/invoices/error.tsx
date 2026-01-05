@@ -1,7 +1,7 @@
 "use client";
 
 import { BellAlertIcon } from "@heroicons/react/24/outline";
-import Error from "@/app/ui/error";
+import Error from "@/components/error";
 
 /**
  * This component is rendered when an error is thrown while rendering any component in the route

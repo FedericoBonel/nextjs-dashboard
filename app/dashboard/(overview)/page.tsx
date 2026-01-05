@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import Header from "@/app/ui/header";
+import Header from "@/components/header";
 import {
   RevenueChartSkeleton,
   LatestInvoicesSkeleton,
   CardsSkeleton,
-} from "@/app/ui/skeletons";
+} from "@/components/skeletons";
 import MESSAGES from "@/app/constants/messages";
 import CardWrapper from "./components/cards";
 import RevenueChart from "./components/revenue-chart";

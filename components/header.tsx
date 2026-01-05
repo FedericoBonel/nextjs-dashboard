@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { lusitana } from "@/app/ui/fonts";
+import { lusitana } from "@/components/fonts";
 
 const Header = ({ children }: PropsWithChildren) => {
   return (

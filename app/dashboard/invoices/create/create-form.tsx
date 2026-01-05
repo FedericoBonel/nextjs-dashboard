@@ -12,9 +12,9 @@ import {
 import { CustomerField } from "@/app/lib/definitions";
 import { createInvoice } from "@/apis/controllers/invoices/actions";
 import { ActionState } from "@/apis/controllers/types";
-import Form from "@/app/ui/form/Form";
-import FieldErrors from "@/app/ui/form/FieldErrors";
-import FormError from "@/app/ui/form/FormError";
+import Form from "@/components/form/Form";
+import FieldErrors from "@/components/form/FieldErrors";
+import FormError from "@/components/form/FormError";
 
 const initialState: ActionState = {
   message: null,

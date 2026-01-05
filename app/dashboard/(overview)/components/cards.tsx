@@ -4,7 +4,7 @@ import {
   UserGroupIcon,
   InboxIcon,
 } from "@heroicons/react/24/outline";
-import { lusitana } from "@/app/ui/fonts";
+import { lusitana } from "@/components/fonts";
 import { countCustomersAndInvoicesAndRevenue } from "@/apis/services/reports";
 import MESSAGES from "@/app/constants/messages";
 import { formatCurrency } from "@/app/lib/utils";
