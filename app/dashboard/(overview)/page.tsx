@@ -1,7 +1,4 @@
 import { Suspense } from "react";
-import CardWrapper from "@/app/ui/dashboard/cards";
-import RevenueChart from "@/app/ui/dashboard/revenue-chart";
-import LatestInvoices from "@/app/ui/dashboard/latest-invoices";
 import Header from "@/app/ui/header";
 import {
   RevenueChartSkeleton,
@@ -9,6 +6,9 @@ import {
   CardsSkeleton,
 } from "@/app/ui/skeletons";
 import MESSAGES from "@/app/constants/messages";
+import CardWrapper from "./components/cards";
+import RevenueChart from "./components/revenue-chart";
+import LatestInvoices from "./components/latest-invoices";
 
 const Dashboard = async () => {
   return (

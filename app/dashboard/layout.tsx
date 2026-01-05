@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import SideNav from "@/app/ui/dashboard/sidenav";
+import SideNav from "./components/sidenav";
 
 // Enable PPR on all pages under '/dashboard'
 export const experimental_ppr = true;
