@@ -9,9 +9,9 @@ import {
 } from "@heroicons/react/24/outline";
 
 import { CustomerField } from "@/app/lib/definitions";
-import { Invoice } from "@/api/models/invoices";
-import { updateInvoiceById } from "@/api/controllers/invoices/actions";
-import { ActionState } from "@/api/controllers/types";
+import { Invoice } from "@/apis/models/invoices";
+import { updateInvoiceById } from "@/apis/controllers/invoices/actions";
+import { ActionState } from "@/apis/controllers/types";
 import discreteToCurrency from "@/app/lib/utils/formatters/discrete-to-currency";
 import { cn } from "@/app/lib/utils";
 import Form from "@/app/ui/form/Form";

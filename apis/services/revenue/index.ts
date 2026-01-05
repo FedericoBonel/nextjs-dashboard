@@ -1,4 +1,4 @@
-import { getAllRevenues } from "@/api/repositories/revenue";
+import { getAllRevenues } from "@/apis/repositories/revenue";
 
 /** Get all revenue data */
 export const getRevenue = async () => {

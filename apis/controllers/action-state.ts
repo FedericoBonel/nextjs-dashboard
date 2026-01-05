@@ -1,4 +1,4 @@
-import { InvalidResult } from "@/api/validators/create-validation-result";
+import { InvalidResult } from "@/apis/validators/create-validation-result";
 import { ActionState } from "./types";
 
 export const initialState: ActionState = {

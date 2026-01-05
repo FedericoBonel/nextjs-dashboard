@@ -5,11 +5,11 @@ import {
   insertInvoice,
   updateInvoiceById,
   deleteInvoiceById,
-} from "@/api/repositories/invoices";
-import { getCustomerById } from "@/api/repositories/customers";
-import { CreateInvoiceDTO } from "@/api/validators/dtos/invoices/create-invoice";
-import { UpdateInvoiceDTO } from "@/api/validators/dtos/invoices/update-invoice";
-import NotFoundError from "@/api/utils/errors/NotFoundError";
+} from "@/apis/repositories/invoices";
+import { getCustomerById } from "@/apis/repositories/customers";
+import { CreateInvoiceDTO } from "@/apis/validators/dtos/invoices/create-invoice";
+import { UpdateInvoiceDTO } from "@/apis/validators/dtos/invoices/update-invoice";
+import NotFoundError from "@/apis/utils/errors/NotFoundError";
 import {
   createInvoiceDTOToInvoice,
   invoiceToInvoiceDetailsDTO,

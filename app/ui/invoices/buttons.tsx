@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { deleteInvoiceById } from "@/api/controllers/invoices/actions";
+import { deleteInvoiceById } from "@/apis/controllers/invoices/actions";
 import { cn } from "@/app/lib/utils";
 import { useRouter } from "next/navigation";
 

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { UpdateInvoice, DeleteInvoice } from "@/app/ui/invoices/buttons";
 import InvoiceStatus from "@/app/ui/invoices/status";
-import { getInvoicesByQuery } from "@/api/services/invoices";
+import { getInvoicesByQuery } from "@/apis/services/invoices";
 import { formatDateToLocal, formatCurrency } from "@/app/lib/utils";
 import MESSAGES from "@/app/constants/messages";
 

@@ -1,6 +1,6 @@
 import CreateInvoiceForm from "@/app/ui/invoices/create-form";
 import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
-import { getCustomers } from "@/api/services/customers";
+import { getCustomers } from "@/apis/services/customers";
 
 const BREADCRUMBS = [
   { label: "Invoices", href: "/dashboard/invoices" },

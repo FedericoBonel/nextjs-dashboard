@@ -1,5 +1,5 @@
-import db from "@/api/db/connection";
-import { createRevenue } from "@/api/models/revenue";
+import db from "@/apis/db/connection";
+import { createRevenue } from "@/apis/models/revenue";
 
 /** Gets all revenue data */
 export const getAllRevenues = async () => {

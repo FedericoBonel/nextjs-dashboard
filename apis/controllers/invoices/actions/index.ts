@@ -3,12 +3,12 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
-import { deleteInvoice, saveInvoice, updateInvoice } from "@/api/services/invoices";
-import validateCreateInvoiceDTO from "@/api/validators/dtos/invoices/create-invoice";
-import validateUpdateInvoiceDTO from "@/api/validators/dtos/invoices/update-invoice";
-import validateIdDTO from "@/api/validators/dtos/shared/id";
+import { deleteInvoice, saveInvoice, updateInvoice } from "@/apis/services/invoices";
+import validateCreateInvoiceDTO from "@/apis/validators/dtos/invoices/create-invoice";
+import validateUpdateInvoiceDTO from "@/apis/validators/dtos/invoices/update-invoice";
+import validateIdDTO from "@/apis/validators/dtos/shared/id";
 import currencyToDiscrete from "@/app/lib/utils/formatters/currency-to-discrete";
-import NotFoundError from "@/api/utils/errors/NotFoundError";
+import NotFoundError from "@/apis/utils/errors/NotFoundError";
 import {
   createBadRequestError,
   createInternalServerError,

@@ -1,8 +1,8 @@
 import {
   getAllCustomers,
   getAllCustomersWithInvoiceSums,
-} from "@/api/repositories/customers";
-import { MAX_ENTITY_LOAD } from "@/api/services/utils/constants";
+} from "@/apis/repositories/customers";
+import { MAX_ENTITY_LOAD } from "@/apis/services/utils/constants";
 
 /** Gets all customers */
 export const getCustomers = async () => {
