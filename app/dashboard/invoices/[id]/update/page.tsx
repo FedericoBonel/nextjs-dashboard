@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import UpdateInvoiceForm from "@/app/ui/invoices/edit-form";
-import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
+import Breadcrumbs from "@/app/ui/breadcrumbs";
 import { getInvoice } from "@/apis/services/invoices";
 import { getCustomers } from "@/apis/services/customers";
 

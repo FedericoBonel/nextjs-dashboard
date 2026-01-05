@@ -1,5 +1,5 @@
 import CreateInvoiceForm from "@/app/ui/invoices/create-form";
-import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
+import Breadcrumbs from "@/app/ui/breadcrumbs";
 import { getCustomers } from "@/apis/services/customers";
 
 const BREADCRUMBS = [
