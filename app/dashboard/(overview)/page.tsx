@@ -31,4 +31,6 @@ const Dashboard = async () => {
   );
 };
 
+export const dynamic = "force-dynamic";
+
 export default Dashboard;

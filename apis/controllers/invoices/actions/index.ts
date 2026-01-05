@@ -45,6 +45,7 @@ export async function createInvoice(
     return createInternalServerError();
   }
 
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }
@@ -83,6 +84,7 @@ export async function updateInvoiceById(
   }
 
   // Revalidate the invoices path to show latest data, and redirect to it
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/invoices");
   redirect("/dashboard/invoices");
 }
@@ -106,5 +108,6 @@ export async function deleteInvoiceById(id: string) {
   }
 
   // revalidate the path
+  revalidatePath("/dashboard");
   revalidatePath("/dashboard/invoices");
 }

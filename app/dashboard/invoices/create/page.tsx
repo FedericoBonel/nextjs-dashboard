@@ -18,4 +18,6 @@ const CreateInvoicePage = async () => {
   );
 };
 
+export const dynamic = "force-dynamic";
+
 export default CreateInvoicePage;
