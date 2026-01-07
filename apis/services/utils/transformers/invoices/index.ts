@@ -1,13 +1,16 @@
 import { Customer } from "@/apis/models/customer";
 import { Invoice } from "@/apis/models/invoices";
-import { CreateInvoiceDTO } from "@/apis/validators/dtos/invoices/create-invoice";
-import { UpdateInvoiceDTO } from "@/apis/validators/dtos/invoices/update-invoice";
-import validateInvoiceDetailsDTO, {
-  InvoiceDetailsDTO,
-} from "@/apis/validators/dtos/invoices/invoice-details";
-import validateInvoiceExcerptDTO, {
-  InvoiceExcerptDTO,
-} from "@/apis/validators/dtos/invoices/invoice-excerpt";
+
+import { CreateInvoiceDTO } from "@/apis/dtos/invoices/create-invoice";
+import { UpdateInvoiceDTO } from "@/apis/dtos/invoices/update-invoice";
+import { InvoiceDetailsDTO } from "@/apis/dtos/invoices/invoice-details";
+import { InvoiceExcerptDTO } from "@/apis/dtos/invoices/invoice-excerpt";
+
+import {
+  validateInvoiceDetailsDTO,
+  validateInvoiceExcerptDTO,
+} from "@/apis/validators/invoices";
+
 import InternalServerError from "@/apis/utils/errors/InternalServerError";
 
 /** Converts an invoice as received from the web to be created to an Invoice model */

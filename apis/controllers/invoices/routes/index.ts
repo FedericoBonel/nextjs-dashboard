@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getInvoicesByQuery } from "@/apis/services/invoices";
-import { validatePaginatedTextSearchDTO } from "@/apis/validators/dtos/shared/textSearch";
+import { validatePaginatedTextSearchDTO } from "@/apis/validators/lists/textSearch";
 
 import {
   createBadRequestResponse,

@@ -7,10 +7,10 @@ import {
   deleteInvoiceById,
 } from "@/apis/repositories/invoices";
 import { getCustomerById } from "@/apis/repositories/customers";
-import { CreateInvoiceDTO } from "@/apis/validators/dtos/invoices/create-invoice";
-import { UpdateInvoiceDTO } from "@/apis/validators/dtos/invoices/update-invoice";
-import { InvoiceDetailsDTO } from "@/apis/validators/dtos/invoices/invoice-details";
-import { InvoiceExcerptDTO } from "@/apis/validators/dtos/invoices/invoice-excerpt";
+import { CreateInvoiceDTO } from "@/apis/dtos/invoices/create-invoice";
+import { UpdateInvoiceDTO } from "@/apis/dtos/invoices/update-invoice";
+import { InvoiceDetailsDTO } from "@/apis/dtos/invoices/invoice-details";
+import { InvoiceExcerptDTO } from "@/apis/dtos/invoices/invoice-excerpt";
 import NotFoundError from "@/apis/utils/errors/NotFoundError";
 import {
   createInvoiceDTOToInvoice,
