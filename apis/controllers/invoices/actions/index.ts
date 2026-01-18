@@ -17,6 +17,8 @@ import validateIdDTO from "@/apis/validators/entities/id";
 import currencyToDiscrete from "@/app/lib/utils/formatters/currency-to-discrete";
 import NotFoundError from "@/apis/utils/errors/NotFoundError";
 
+import { verifyUserExists } from "@/lib/auth";
+
 import {
   createBadRequestError,
   createInternalServerError,
@@ -25,8 +27,10 @@ import { ActionState } from "../../types";
 
 export async function createInvoice(
   _prevState: ActionState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionState> {
+  await verifyUserExists();
+
   // Validate and format the data
   const rawData = {
     customerId: formData.get("customerId"),
@@ -41,7 +45,7 @@ export async function createInvoice(
   }
 
   validationRes.data.amount = currencyToDiscrete["usd"](
-    validationRes.data.amount
+    validationRes.data.amount,
   );
 
   try {
@@ -61,8 +65,10 @@ export async function createInvoice(
 export async function updateInvoiceById(
   id: string,
   _previousState: ActionState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionState> {
+  await verifyUserExists();
+
   // Validate and format the data
   const rawData = {
     id,
@@ -78,7 +84,7 @@ export async function updateInvoiceById(
   }
 
   validationRes.data.amount = currencyToDiscrete["usd"](
-    validationRes.data.amount
+    validationRes.data.amount,
   );
 
   try {
@@ -98,6 +104,8 @@ export async function updateInvoiceById(
 }
 
 export async function deleteInvoiceById(id: string) {
+  await verifyUserExists();
+
   try {
     // validate the id
     const validationRes = validateIdDTO(id);

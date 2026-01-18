@@ -3,16 +3,24 @@ import { NextRequest, NextResponse } from "next/server";
 import { getInvoicesByQuery } from "@/apis/services/invoices";
 import { validatePaginatedTextSearchDTO } from "@/apis/validators/lists/textSearch";
 
+import { authUser } from "@/lib/auth";
+
 import {
   createBadRequestResponse,
   createFailedResponse,
   createSuccessResponse,
+  createUnauthorizedResponse,
 } from "../../utils/responses";
 
 /** Request handler that gets a list of invoices by text search, page, and limit */
 export const getInvoicesByTextSearchPageAndLimit = async (
-  request: NextRequest
+  request: NextRequest,
 ) => {
+  const user = await authUser();
+  if (!user) {
+    return NextResponse.json(createUnauthorizedResponse(), { status: 401 });
+  }
+
   // Validate query params
   const page = request.nextUrl.searchParams.get("page");
   const limit = request.nextUrl.searchParams.get("limit");
@@ -31,7 +39,7 @@ export const getInvoicesByTextSearchPageAndLimit = async (
     const invoices = await getInvoicesByQuery(
       validQuery.data.textSearch,
       validQuery.data.page,
-      validQuery.data.limit
+      validQuery.data.limit,
     );
     return NextResponse.json(createSuccessResponse(invoices), { status: 200 });
   } catch (error) {

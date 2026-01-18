@@ -6,11 +6,16 @@ import {
   CardsSkeleton,
 } from "@/components/skeletons";
 import MESSAGES from "@/app/constants/messages";
+
+import { verifyUserExists } from "@/lib/auth";
+
 import CardWrapper from "./components/cards";
 import RevenueChart from "./components/revenue-chart";
 import LatestInvoices from "./components/latest-invoices";
 
 const Dashboard = async () => {
+  await verifyUserExists();
+
   return (
     <main>
       <Header>{MESSAGES.dashboardTitle}</Header>

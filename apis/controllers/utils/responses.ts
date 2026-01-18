@@ -20,7 +20,12 @@ export const createFailedResponse = <Data>(data: Data) => {
 
 /** Creates a bad request API response object as it should be exposed */
 export const createBadRequestResponse = <T>(
-  errors: InvalidResult<T>["errors"]
+  errors: InvalidResult<T>["errors"],
 ) => {
-  return createApiResponse(errors, false);
+  return createFailedResponse(errors);
+};
+
+/** Creates an unauthorized API response object as it should be exposed */
+export const createUnauthorizedResponse = <T>() => {
+  return createFailedResponse(undefined);
 };

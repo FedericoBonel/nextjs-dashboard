@@ -1,5 +1,7 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import { getCustomers } from "@/apis/services/customers";
+import { verifyUserExists } from "@/lib/auth";
+
 import CreateInvoiceForm from "./create-form";
 
 const BREADCRUMBS = [
@@ -8,6 +10,8 @@ const BREADCRUMBS = [
 ];
 
 const CreateInvoicePage = async () => {
+  await verifyUserExists();
+
   const allCustomers = await getCustomers();
 
   return (

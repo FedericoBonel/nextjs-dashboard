@@ -5,12 +5,16 @@ import Pagination from "@/components/pagination";
 import { getInvoicePageCount } from "@/apis/services/invoices";
 import MESSAGES from "@/app/constants/messages";
 import { InvoicesTableSkeleton } from "@/components/skeletons";
+import { verifyUserExists } from "@/lib/auth";
+
 import { CreateInvoice } from "./components/buttons";
 import Table from "./components/table";
 
 const Invoices = async (props: {
   searchParams?: Promise<{ query?: string; page?: string }>;
 }) => {
+  await verifyUserExists();
+
   // Use async search params in server to fetch and render list server side
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";

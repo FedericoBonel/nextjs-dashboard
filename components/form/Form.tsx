@@ -1,17 +1,22 @@
 "use client";
 
-import { FormHTMLAttributes, PropsWithChildren } from "react";
+import { FormHTMLAttributes, PropsWithChildren, ReactNode } from "react";
 import Link from "next/link";
 
 import { Button } from "../button";
 import { useRouter } from "next/navigation";
+import { cn } from "@/app/lib/utils";
 
 interface FormProps {
   action: FormHTMLAttributes<HTMLFormElement>["action"];
   isPending?: boolean;
   submitLabel?: string;
+  submitIcon?: ReactNode;
   cancelLabel?: string;
   cancelHref?: string;
+  hideCancel?: boolean;
+  fullWidthActions?: boolean;
+  className?: string;
 }
 
 const Form = ({
@@ -19,22 +24,32 @@ const Form = ({
   children,
   isPending,
   cancelHref,
+  hideCancel = false,
   cancelLabel = "Cancel",
   submitLabel = "Submit",
+  submitIcon,
+  fullWidthActions,
+  className,
 }: PropsWithChildren<FormProps>) => {
   const router = useRouter();
 
   const cancelButton = cancelHref ? (
     <Link
       href={cancelHref}
-      className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+      className={cn(
+        "flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200 active:bg-red-300",
+        fullWidthActions && "w-full"
+      )}
     >
       {cancelLabel}
     </Link>
   ) : (
     <Button
       type="button"
-      className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+      className={cn(
+        "flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200 active:bg-red-300",
+        fullWidthActions && "w-full"
+      )}
       onClick={router.back}
     >
       {cancelLabel}
@@ -43,14 +58,23 @@ const Form = ({
 
   return (
     <form action={action} aria-describedby="form-errors">
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">{children}</div>
+      <div className={cn("rounded-md bg-gray-50 p-4 md:p-6", className)}>
+        {children}
+      </div>
       <div className="mt-6 flex justify-end gap-4">
-        {cancelButton}
-        <Button type="submit" disabled={isPending}>
+        {!hideCancel && cancelButton}
+        <Button
+          type="submit"
+          disabled={isPending}
+          className={fullWidthActions ? "w-full" : ""}
+        >
           {submitLabel}
           {isPending && (
             <svg
-              className="animate-spin h-5 w-5 ml-2"
+              className={cn(
+                "animate-spin h-5 w-5",
+                fullWidthActions ? "ml-auto" : "ml-2"
+              )}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -70,6 +94,7 @@ const Form = ({
               ></path>
             </svg>
           )}
+          {!isPending && submitIcon}
         </Button>
       </div>
     </form>
